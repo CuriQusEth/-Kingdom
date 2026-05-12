@@ -1,20 +1,32 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+# Kingdom Sable
 
-# Run and deploy your AI Studio app
+**Establish Your Kingdom** is a satisfying medieval kingdom-building strategy game. Start as a humble lord with a small village and grow it into a mighty kingdom. Build structures, manage resources, expand territory, defend against threats, and lead your people to prosperity. 
 
-This contains everything you need to run your app locally.
+## Core Gameplay
+- **Tap-to-build** intuitive kingdom builder.
+- **Gather resources:** Wood, Stone, Food, Gold, Mana.
+- **Construct and upgrade buildings:** Castle, Farms, Mines, Barracks, Markets, Temples, Wizard Towers, etc.
+- **Manage Citizens:** Assign jobs and manage population happiness.
+- **Real-time progression** with strong offline earnings.
 
-View your app in AI Studio: https://ai.studio/apps/528dfd77-f0ba-45d1-ba71-68d77438e2c3
+## Technical Details (Base Mainnet)
+This game natively leverages on-chain utilities.
+- **Hybrid Leaderboards** (Greatest Rulers + Most Prosperous Kingdoms)
+- **SIWE Integration** for secure authentication
+- **ERC-8004 Trustless Agents** integration
+- **ERC-8021 Transaction Attribution**
 
-## Run Locally
+## Getting Started
 
-**Prerequisites:**  Node.js
+To develop the game locally:
 
+```bash
+npm install
+npm run dev
+```
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+Build for production:
+```bash
+npm run build
+npm start
+```

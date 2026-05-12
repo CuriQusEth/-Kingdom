@@ -1,0 +1,42 @@
+{
+  "name": "Kingdom Sable Orchestrator",
+  "description": "Kingdom Sable platformunda çalışan ERC-8004 uyumlu AI Agent. Kingdom management, sable dynasty operations, strategic rulership ve multi-realm governance yapan akıllı orchestrator.",
+  "version": "1.0.0",
+  "type": "https://eips.ethereum.org/EIPS/eip-8004#registration-v1",
+  "image": "https://kingdom-sable.vercel.app/logo.png",
+  "wallets": {
+    "base": "0x29536D0bc1004ab274c4F0F59734Ad74D4559b7B"
+  },
+  "services": [
+    {
+      "name": "A2A",
+      "endpoint": "https://kingdom-sable.vercel.app/.well-known/agent-card.json",
+      "version": "1.0.0",
+      "description": "Agent-to-Agent communication"
+    },
+    {
+      "name": "MCP",
+      "endpoint": "https://kingdom-sable.vercel.app/api/mcp",
+      "version": "1.0.0",
+      "description": "Model Context Protocol - Active command execution"
+    },
+    {
+      "name": "API",
+      "endpoint": "https://kingdom-sable.vercel.app/api/agent",
+      "version": "1.0.0",
+      "description": "Main agent control API"
+    }
+  ],
+  "capabilities": [
+    "kingdom-management",
+    "dynasty-operations",
+    "strategic-rulership",
+    "multi-realm-governance",
+    "resource-management",
+    "political-orchestration",
+    "mcp-command-execution"
+  ],
+  "supportedChains": ["eip155:8453"],
+  "active": true,
+  "status": "online"
+}
