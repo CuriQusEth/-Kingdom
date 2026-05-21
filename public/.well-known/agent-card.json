@@ -27,6 +27,33 @@
       "description": "Main agent control API"
     }
   ],
+  "skills": [
+    {
+      "id": "kingdom-management",
+      "name": "Kingdom Management",
+      "description": "Manage kingdom resources and operations"
+    },
+    {
+      "id": "dynasty-operations",
+      "name": "Dynasty Operations",
+      "description": "Handle sable dynasty operations"
+    },
+    {
+      "id": "strategic-rulership",
+      "name": "Strategic Rulership",
+      "description": "Perform strategic governance and decisions"
+    },
+    {
+      "id": "multi-realm-governance",
+      "name": "Multi-Realm Governance",
+      "description": "Orchestrate policies across multiple realms"
+    },
+    {
+      "id": "mcp-command-execution",
+      "name": "MCP Command Execution",
+      "description": "Execute active Model Context Protocol commands"
+    }
+  ],
   "capabilities": [
     "kingdom-management",
     "dynasty-operations",
