@@ -6,7 +6,8 @@ import { PopulationMenu } from './components/game/PopulationMenu';
 import { MainView } from './components/game/MainView';
 import { Web3Controls } from './components/web3/Web3Controls';
 import { motion, AnimatePresence } from 'motion/react';
-import { Crown } from 'lucide-react';
+import { Crown, Sun } from 'lucide-react';
+import { useAccount, useSendTransaction } from 'wagmi';
 
 export default function App() {
   const gameTick = useGameStore(state => state.gameTick);
@@ -14,6 +15,16 @@ export default function App() {
   const setKingdomName = useGameStore(state => state.setKingdomName);
   
   const [showIntro, setShowIntro] = useState(true);
+
+  const { isConnected } = useAccount();
+  const { sendTransaction } = useSendTransaction();
+
+  const sendGMTransaction = () => {
+    sendTransaction({
+      to: '0xcD0dd3716C5561De47a24949335dF8a8CD8F71a3',
+      value: BigInt(0),
+    });
+  };
 
   // Game Loop
   useEffect(() => {
@@ -75,8 +86,16 @@ export default function App() {
       <Web3Controls />
       
       {/* Title display */}
-      <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-30 pointer-events-none opacity-50 text-center">
-        <h2 className="medieval-title text-2xl text-white/50 tracking-widest uppercase">
+      <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-30 pointer-events-none opacity-50 text-center flex flex-col items-center gap-4">
+        {isConnected && (
+          <button 
+            onClick={sendGMTransaction}
+            className="px-3 py-2 rounded-lg bg-[#E8A020]/20 hover:bg-[#E8A020]/30 border border-[#E8A020]/40 text-[#E8A020] transition-colors flex items-center gap-2 font-['Cinzel'] text-xs font-bold pointer-events-auto shadow-lg backdrop-blur-sm"
+          >
+            <Sun size={14} /> SAY GM
+          </button>
+        )}
+        <h2 className="medieval-title text-2xl text-white/50 tracking-widest uppercase mt-4">
           {kingdomName}
         </h2>
       </div>
