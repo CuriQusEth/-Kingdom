@@ -6,8 +6,10 @@ import { PopulationMenu } from './components/game/PopulationMenu';
 import { MainView } from './components/game/MainView';
 import { Web3Controls } from './components/web3/Web3Controls';
 import { motion, AnimatePresence } from 'motion/react';
-import { Crown, Sun } from 'lucide-react';
-import { useAccount, useSendTransaction } from 'wagmi';
+import { Crown, Sun, CheckCircle2, Loader2 } from 'lucide-react';
+import { useAccount, useSendTransaction, useWaitForTransactionReceipt, useSwitchChain } from 'wagmi';
+import { base } from 'wagmi/chains';
+import { withERC8021Attribution } from './lib/erc8021';
 
 export default function App() {
   const gameTick = useGameStore(state => state.gameTick);
@@ -16,13 +18,26 @@ export default function App() {
   
   const [showIntro, setShowIntro] = useState(true);
 
-  const { isConnected } = useAccount();
-  const { sendTransaction } = useSendTransaction();
+  const { isConnected, chainId } = useAccount();
+  const { switchChain } = useSwitchChain();
+  const { sendTransaction, data: txHash, isPending: isTxPending } = useSendTransaction();
+  const { isLoading: isWaitingForReceipt, isSuccess: isTxSuccess } = useWaitForTransactionReceipt({ 
+    hash: txHash,
+    pollingInterval: 200, // Denim 200ms native block polling
+  });
+
+  const isBaseMainnet = chainId === base.id;
 
   const sendGMTransaction = () => {
+    if (!isBaseMainnet) {
+      switchChain({ chainId: base.id });
+      return;
+    }
+    const attributedData = withERC8021Attribution('0x');
     sendTransaction({
       to: '0xcD0dd3716C5561De47a24949335dF8a8CD8F71a3',
       value: BigInt(0),
+      data: attributedData,
     });
   };
 
@@ -85,17 +100,53 @@ export default function App() {
       <PopulationMenu />
       <Web3Controls />
       
-      {/* Title display */}
-      <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-30 pointer-events-none opacity-50 text-center flex flex-col items-center gap-4">
+      {/* Title & On-Chain Action display */}
+      <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-30 flex flex-col items-center gap-3">
         {isConnected && (
-          <button 
-            onClick={sendGMTransaction}
-            className="px-3 py-2 rounded-lg bg-[#E8A020]/20 hover:bg-[#E8A020]/30 border border-[#E8A020]/40 text-[#E8A020] transition-colors flex items-center gap-2 font-['Cinzel'] text-xs font-bold pointer-events-auto shadow-lg backdrop-blur-sm"
-          >
-            <Sun size={14} /> SAY GM
-          </button>
+          <div className="flex flex-col items-center gap-1.5 pointer-events-auto">
+            <button 
+              onClick={sendGMTransaction}
+              disabled={isTxPending || isWaitingForReceipt}
+              className={`px-4 py-2 rounded-xl border transition-all flex items-center gap-2 font-['Cinzel'] text-xs font-bold shadow-xl backdrop-blur-md cursor-pointer ${
+                !isBaseMainnet 
+                  ? 'bg-amber-900/60 border-amber-500/80 text-amber-200 hover:bg-amber-800/80' 
+                  : isTxSuccess
+                  ? 'bg-emerald-900/60 border-emerald-500/80 text-emerald-200'
+                  : 'bg-[#0052FF]/30 hover:bg-[#0052FF]/50 border-[#0052FF]/60 text-white hover:scale-105 active:scale-95'
+              }`}
+            >
+              {isTxPending || isWaitingForReceipt ? (
+                <>
+                  <Loader2 size={14} className="animate-spin text-blue-300" />
+                  <span>DENIM MINING (200ms)...</span>
+                </>
+              ) : !isBaseMainnet ? (
+                <span>SWITCH TO BASE MAINNET</span>
+              ) : isTxSuccess ? (
+                <>
+                  <CheckCircle2 size={14} className="text-emerald-400" />
+                  <span>GM CONFIRMED ON DENIM!</span>
+                </>
+              ) : (
+                <>
+                  <Sun size={14} className="text-[#E8A020]" />
+                  <span>SAY GM ON BASE MAINNET</span>
+                </>
+              )}
+            </button>
+            {isTxSuccess && txHash && (
+              <a 
+                href={`https://basescan.org/tx/${txHash}`}
+                target="_blank"
+                rel="noreferrer"
+                className="text-[10px] font-mono text-emerald-400/90 underline hover:text-emerald-300 transition-colors pointer-events-auto"
+              >
+                Tx: {txHash.slice(0, 10)}... (200ms canonical block)
+              </a>
+            )}
+          </div>
         )}
-        <h2 className="medieval-title text-2xl text-white/50 tracking-widest uppercase mt-4">
+        <h2 className="medieval-title text-2xl text-white/40 tracking-widest uppercase pointer-events-none drop-shadow-md">
           {kingdomName}
         </h2>
       </div>

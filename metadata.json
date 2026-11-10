@@ -1,6 +1,6 @@
 {
-  "name": " Kingdom",
-  "description": "",
+  "name": "Establish Your Kingdom",
+  "description": "Medieval strategy kingdom builder on Base Mainnet powered by Denim 200ms canonical blocks, ERC-8021 attribution, and on-chain records.",
   "requestFramePermissions": [],
   "majorCapabilities": []
 }
